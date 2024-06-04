@@ -29,6 +29,7 @@ export default function Home() {
           margin: "2rem",
           display: "flex",
           gap: "1rem",
+          flexDirection: "column",
         }}
       >
         <div>
@@ -47,7 +48,6 @@ export default function Home() {
             style={{
               margin: "1rem",
               display: "flex",
-              flexDirection: "column",
             }}
           >
             <label>Rows</label>
