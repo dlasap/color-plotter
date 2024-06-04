@@ -1,94 +1,190 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+import React, { useState } from "react";
+import Grid from "./components/grid";
+import { debounce } from "lodash";
 
 export default function Home() {
+  const [rows, setRows] = useState(30);
+  const [cols, setCols] = useState(30);
+  const [data, setData] = useState({
+    "3-3": "green",
+  });
+
+  const [x, setX] = useState("");
+  const [y, setY] = useState("");
+  const [multilineXY, setMultilineXY] = useState("");
+  const [color, setColor] = useState("#5ff042");
+  const [mode, setMode] = useState("multi");
+
+  function parseInput(input) {
+    const lines = input.trim().split("\n");
+    const array = lines.map((line) => line.split(" ").map(Number));
+    return array;
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main>
+      <div
+        style={{
+          margin: "2rem",
+        }}
+      >
+        <h1>
+          <span
+            style={{
+              color: "pink",
+            }}
           >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            Lunar's
+          </span>{" "}
+          Color Plotter
+        </h1>
+
+        <div
+          style={{
+            margin: "1rem",
+          }}
+        >
+          <label>Rows</label>
+          <input value={rows} type="number" onChange={(e) => setRows(e.target.value)} />
+          <label>Columns</label>
+          <input value={cols} type="number" onChange={(e) => setCols(e.target.value)} />
         </div>
-      </div>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+        <div
+          style={{
+            margin: "2rem",
+          }}
         >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+          <form
+            id="plot-form"
+            onSubmit={(e) => {
+              e.preventDefault();
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+              if (mode === "multi") {
+                const parsedKeys = parseInput(multilineXY);
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
+                const multiData = parsedKeys.reduce((acc, curr) => {
+                  return {
+                    ...acc,
+                    [`${curr[1]}-${curr[0]}`]: color,
+                  };
+                }, {});
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+                setData((prev) => ({
+                  ...prev,
+                  ...multiData,
+                }));
+              } else {
+                if (!x || !y) return;
+
+                setData((data) => ({
+                  ...data,
+                  [`${y}-${x}`]: color,
+                }));
+              }
+
+              setX("");
+              setY("");
+              setColor("#5ff042");
+            }}
+          >
+            <div
+              style={{
+                marginBottom: "2rem",
+              }}
+            >
+              <button
+                style={{
+                  borderRadius: "1rem",
+                  padding: "2px 5px 2px 5px",
+                  background: "yellow",
+                  color: "black",
+                  cursor: "pointer",
+                  border: "none",
+                }}
+                onClick={() => setMode((prev) => (prev === "multi" ? "single" : "multi"))}
+              >
+                Toggle Input Mode
+              </button>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "auto auto",
+                gap: "1rem",
+                width: "200px",
+              }}
+            >
+              {mode === "single" ? (
+                <>
+                  <div>
+                    <label>Input X</label>
+                    <input type="number" value={x} onChange={(e) => setX(e.target.value)} />
+                  </div>
+                  <div>
+                    <label>Input Y</label>
+                    <input type="number" value={y} onChange={(e) => setY(e.target.value)} />
+                  </div>
+                </>
+              ) : (
+                <div>
+                  <label>Multi-line Plot Input</label>
+                  <textarea rows={5} cols={20} value={multilineXY} onChange={(e) => setMultilineXY(e.target.value)} />
+                </div>
+              )}
+              <div
+                style={{
+                  display: "flex",
+                  gap: "1rem",
+                }}
+              >
+                <label>Color</label>
+                <input
+                  type="color"
+                  value={color}
+                  onChange={(e) => {
+                    setColor(e.target.value);
+                  }}
+                />
+              </div>
+              <button
+                type="submit"
+                style={{
+                  width: "100px",
+                  height: "25px",
+                }}
+              >
+                {" "}
+                Plot!
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div
+          style={{
+            margin: "2rem",
+          }}
         >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+          {Object.keys(data).length > 0 && (
+            <button
+              style={{
+                padding: "0.33rem",
+                background: "red",
+                border: "none",
+                borderRadius: "2rem",
+                fontWeight: 700,
+              }}
+              onClick={() => setData({})}
+            >
+              {" "}
+              CLEAR PLOTTED DATA
+            </button>
+          )}
+        </div>
+        <Grid rows={rows} cols={cols} data={data} />
       </div>
     </main>
   );
