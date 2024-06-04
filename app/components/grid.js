@@ -20,7 +20,7 @@ const Grid = memo(({ rows, cols, data }) => {
         </div>
       );
     },
-    [rows, cols, data]
+    [rows, cols, data, renderCell]
   );
 
   const grid = [];
@@ -30,5 +30,5 @@ const Grid = memo(({ rows, cols, data }) => {
 
   return <div className="grid">{grid}</div>;
 });
-
+Grid.displayName = "Grid";
 export default Grid;

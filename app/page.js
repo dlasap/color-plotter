@@ -35,7 +35,7 @@ export default function Home() {
               color: "pink",
             }}
           >
-            Lunar's
+            Lunar&apos;s
           </span>{" "}
           Color Plotter
         </h1>
