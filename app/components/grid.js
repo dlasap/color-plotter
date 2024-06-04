@@ -28,7 +28,16 @@ const Grid = memo(({ rows, cols, data }) => {
     grid.push(renderRow(row));
   }
 
-  return <div className="grid">{grid}</div>;
+  return (
+    <div
+      className="grid"
+      style={{
+        marginTop: "50px",
+      }}
+    >
+      {grid}
+    </div>
+  );
 });
 Grid.displayName = "Grid";
 export default Grid;
