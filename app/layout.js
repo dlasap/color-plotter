@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
         <meta property="og:title" content="Lunar's Color Plotter" />
         <meta property="og:description" content="Color plotter developed by Lunar" />
         <meta property="og:image" content="https://cdn.britannica.com/70/191970-131-A85628DA/Color-wheel-light-color-spectrum.jpg" />
-        <title>Your App Title</title>
+        <title>Lunar's Color Plotter</title>
       </head>
       <body className={inter.className}>{children}</body>
     </html>

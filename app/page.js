@@ -16,11 +16,45 @@ export default function Home() {
   const [color, setColor] = useState("#5ff042");
   const [mode, setMode] = useState("multi");
 
+  const [lineX, setLineX] = useState("");
+  const [lineY, setLineY] = useState("");
+  const [colorX, setColorX] = useState("#5ff042");
+  const [colorY, setColorY] = useState("#5ff042");
+
+  const [highlightedPlots, setHighlightedPlots] = useState({
+    x: {},
+    y: {},
+  });
+
   function parseInput(input) {
     const lines = input.trim().split("\n");
     const array = lines.map((line) => line.split(" ").map(Number));
     return array;
   }
+
+  const handleHighlight = (line) => {
+    if (line === "x") {
+      setHighlightedPlots((prev) => {
+        return {
+          x: {
+            ...prev.x,
+            [lineX]: colorX,
+          },
+          y: prev.y,
+        };
+      });
+    } else {
+      setHighlightedPlots((prev) => {
+        return {
+          x: prev.x,
+          y: {
+            ...prev.y,
+            [lineY]: colorY,
+          },
+        };
+      });
+    }
+  };
 
   return (
     <main>
@@ -166,6 +200,99 @@ export default function Home() {
                 </button>
               </div>
             </form>
+
+            <div
+              id="highlight-line-form"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+                marginTop: "25px",
+              }}
+            >
+              {/* X HIGHLIGHT */}
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                }}
+              >
+                <label>Highlight X</label>
+                <input type="number" id="x-highlight" value={lineX} onChange={(e) => setLineX(e.target.value)} />
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "1rem",
+                  }}
+                >
+                  <label>Color</label>
+                  <input
+                    type="color"
+                    value={colorX}
+                    onChange={(e) => {
+                      setColorX(e.target.value);
+                    }}
+                  />
+                </div>
+                <button
+                  onClick={() => {
+                    handleHighlight("x");
+                    setLineX("");
+                  }}
+                >
+                  HIGHLIGHT
+                </button>
+              </div>
+
+              {/* Y HIGHLIGHT */}
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: "10px",
+                }}
+              >
+                <label>Highlight Y</label>
+                <input type="number" id="y-highlight" value={lineY} onChange={(e) => setLineY(e.target.value)} />
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "1rem",
+                  }}
+                >
+                  <label>Color</label>
+                  <input
+                    type="color"
+                    value={colorY}
+                    onChange={(e) => {
+                      setColorY(e.target.value);
+                    }}
+                  />
+                </div>
+                <button
+                  onClick={() => {
+                    handleHighlight("y");
+                    setLineY("");
+                  }}
+                >
+                  HIGHLIGHT
+                </button>
+              </div>
+
+              <div>
+                <button
+                  onClick={() => {
+                    setHighlightedPlots({
+                      x: {},
+                      y: {},
+                    });
+                  }}
+                >
+                  Reset Highlighted Lines
+                </button>
+              </div>
+            </div>
           </div>
 
           <div
@@ -191,7 +318,7 @@ export default function Home() {
           </div>
         </div>
 
-        <Grid rows={rows} cols={cols} data={data} />
+        <Grid rows={rows} cols={cols} data={data} highlighted={highlightedPlots} />
       </div>
     </main>
   );

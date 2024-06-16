@@ -2,10 +2,23 @@
 import React, { memo, useCallback } from "react";
 import "./grid.css";
 
-const Grid = memo(({ rows, cols, data }) => {
+const Grid = memo(({ rows, cols, data, highlighted }) => {
+  const xHighlightsKeys = Object.keys(highlighted.x);
+  const yHighlightsKeys = Object.keys(highlighted.y);
+
   const renderCell = (row, col) => {
     const color = data[`${row}-${col}`] || "white";
-    return <div key={`${row}-${col}`} className="cell" style={{ backgroundColor: color }}></div>;
+    return (
+      <div
+        key={`${row}-${col}`}
+        className="cell"
+        style={{
+          backgroundColor: color,
+          borderBottom: xHighlightsKeys.includes(`${row + 2}`) ? `solid 2px ${highlighted.x[row + 2]}` : "",
+          borderRight: yHighlightsKeys.includes(`${col + 2}`) ? `solid 2px  ${highlighted.y[col + 2]}` : "",
+        }}
+      ></div>
+    );
   };
 
   const renderRow = useCallback(
