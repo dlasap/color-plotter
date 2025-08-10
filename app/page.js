@@ -56,6 +56,13 @@ export default function Home() {
     }
   };
 
+  // TURN OFF COLOR PLOTTER TEMPORARILY
+
+  const TEMP_DISABLED = true;
+
+  if (TEMP_DISABLED) {
+    return null;
+  }
   return (
     <main>
       <div
