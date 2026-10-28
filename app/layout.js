@@ -1,7 +1,8 @@
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
 
 export const metadata = {
   title: "Lunar's Color Plotter",
@@ -10,16 +11,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${jetbrains.variable}`}>
       <head>
-        <meta charset="UTF-8" />
+        <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta property="og:title" content={"Lunar's Color Plotter"} />
         <meta property="og:description" content="Color plotter developed by Lunar" />
         <meta property="og:image" content="https://cdn.britannica.com/70/191970-131-A85628DA/Color-wheel-light-color-spectrum.jpg" />
         <title>Lunar&apos;s Color Plotter</title>
       </head>
-      <body className={inter.className}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

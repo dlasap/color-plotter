@@ -1,15 +1,69 @@
+.grid-frame {
+  --axis: 1.75rem;
+  display: grid;
+  grid-template-columns: var(--axis) max-content;
+  grid-template-rows: var(--axis) max-content;
+  width: max-content;
+}
+
 .grid {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .row {
-    display: flex;
-  }
-  
-  .cell {
-    width: 10px;
-    height: 10px;
-    border: 1px solid #ccc;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  background: white;
+  box-shadow: var(--paper-shadow);
+  cursor: crosshair;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: var(--cell, 10px);
+  height: var(--cell, 10px);
+  border: 1px solid #ccc;
+}
+
+.cell:hover {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+  position: relative;
+  z-index: 1;
+}
+
+.axis {
+  display: flex;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+.axis-x {
+  align-items: flex-end;
+  padding-bottom: 6px;
+}
+
+.axis-x .axis-tick {
+  width: var(--cell, 10px);
+  flex: none;
+  overflow: visible;
+  white-space: nowrap;
+}
+
+.axis-y {
+  flex-direction: column;
+  align-items: flex-end;
+  padding-right: 6px;
+}
+
+.axis-y .axis-tick {
+  height: var(--cell, 10px);
+  flex: none;
+  display: flex;
+  align-items: center;
+  overflow: visible;
+  white-space: nowrap;
+}
