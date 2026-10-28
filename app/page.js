@@ -58,7 +58,7 @@ export default function Home() {
 
   // TURN OFF COLOR PLOTTER TEMPORARILY
 
-  const TEMP_DISABLED = true;
+  const TEMP_DISABLED = false;
 
   if (TEMP_DISABLED) {
     return null;
